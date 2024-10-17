@@ -5,7 +5,7 @@ import javax.swing.*;
 public class Main {
     public static void main(String[] args) {
         EmailSend newEmail = new EmailSend("linus.holmer@stud.sti.se","2288Rust!");
-        newEmail.sendEmail("linus.holmer@stud.sti.se","hej","hej");
+
 
         JTextField emailTextField = new JTextField(20);
         JTextField subjectTextField = new JTextField(20);
@@ -38,7 +38,7 @@ public class Main {
 
             String message = messageTextField.getText();
 
-
+            newEmail.sendEmail(mailAdress,subject,message);
 
             System.out.println("Skicka mejl till: " + mailAdress
                     + "\nÄmne: " + subject + "\nInnehåll: "+ message);
