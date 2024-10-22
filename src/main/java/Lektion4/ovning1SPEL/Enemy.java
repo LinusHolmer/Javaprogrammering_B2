@@ -7,36 +7,36 @@ public abstract class Enemy {
     private double physicalDefense;
     private double magicalDefense;
     private int level;
+    private double maxHealth;
 
 
-    public Enemy(String name, int health, int attackPower, int physicalDefense, int magicalDefense, int level) {
+    public Enemy(String name, double health, double attackPower, double physicalDefense, double magicalDefense, int level, double maxHealth) {
         this.name = name;
         this.health = health;
         this.attackPower = attackPower;
         this.physicalDefense = physicalDefense;
         this.magicalDefense = magicalDefense;
         this.level = level;
+        this.maxHealth = maxHealth;
     }
 
     public void physicalAttack(Player player) {
-        double damageDealt = attackPower - player.getPhysicalDefense();
+        double damageDealt = attackPower * (1 - player.getPhysicalDefense());
         player.takeDamage(damageDealt);
         System.out.println(name + " attacked " + player.getName() + " for " + damageDealt + " physical damage");
     }
 
-    public void magicalAttack(Player player) {
-        double damageDealt = attackPower - player.getMagicalDefense();
-        player.takeDamage(damageDealt);
-        System.out.println(name + " attacked " + player.getName() + " for " + damageDealt + " magical damage");
-    }
-
     public void takeDamage(double damage) {
         health -= damage;
-        System.out.println(name + " took " + damage + " damage.");
-        if (health <= 0) {
-            System.out.println(name + "has been defeated");
-        }
 
+    }
+
+    public boolean isAlive(){
+        if(health <= 0){
+            return false;
+        } else {
+            return true;
+        }
     }
 
     public String getName() {
@@ -62,6 +62,9 @@ public abstract class Enemy {
     public int getLevel() {
         return level;
     }
+
+    public double getMaxHealth(){ return maxHealth; }
+
 
     public abstract void specialAbility();
 }
