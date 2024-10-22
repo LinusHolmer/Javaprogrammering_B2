@@ -36,4 +36,12 @@ public class GameMap {
             System.out.println("You move back to town");
         }
     }
+
+    public int getY() {
+        return y;
+    }
+
+    public int getX() {
+        return x;
+    }
 }
