@@ -56,12 +56,6 @@ public class Player {
         System.out.println(name + " attacked " + enemy.getName() + " for " + damageDealt + " physical damage");
     }
 
-    public void magicalAttack(Enemy enemy) {
-        double damageDealt = attackPower * (1 - enemy.getMagicalDefense());
-        enemy.takeDamage(damageDealt);
-        System.out.println(name + " attacked " + enemy.getName() + " for " + damageDealt + " magical damage");
-    }
-
     public boolean isAlive(){
         if(health <= 0){
             return false;
