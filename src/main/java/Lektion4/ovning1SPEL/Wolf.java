@@ -2,7 +2,7 @@ package Lektion4.ovning1SPEL;
 
 public class Wolf extends Enemy{
     public Wolf() {
-        super("Wolf",75,15,0.10,0,1,75);
+        super("Wolf",75,15,0.10,0,1,75,20);
     }
 
     @Override

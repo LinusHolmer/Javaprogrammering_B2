@@ -13,9 +13,8 @@ public class Game {
 
 
     public Game(){
-
         gameMap = new GameMap();
-        player = new Player("",100,1,0,0,50,10,100);
+        player = new Player("",100,1,0,0,50,10,100, 0,100,50);
         random = new Random();
 
     }
@@ -91,8 +90,7 @@ public class Game {
         enemies.addAll(Collections.nCopies(2, new Wolf()));
         enemies.add(new ForestTroll());
 
-        Enemy enemy = enemies.get(random.nextInt(enemies.size()));
-        return enemy;
+        return enemies.get(random.nextInt(enemies.size()));
     }
 
 }

@@ -6,10 +6,12 @@ public class Combat {
     private Player player;
     private Enemy enemy;
     private Random random = new Random();
+    private Game game;
 
     public Combat(Player player, Enemy enemy) {
         this.player = player;
         this.enemy = enemy;
+        game = new Game();
     }
 
     public void startCombat() {
@@ -18,7 +20,7 @@ public class Combat {
 
         while (battle) {
             System.out.println("attack, fireball, heal or flee!");
-            String battleInput = getUserInput();
+            String battleInput = game.getUserInput();
 
             switch (battleInput) {
                 case "attack" -> playerAttack();
@@ -38,6 +40,8 @@ public class Combat {
             System.out.println(player.getName() + " has been defeated!");
         } else if (!enemy.isAlive()) {
             System.out.println(enemy.getName() + " has been defeated!");
+            player.setExperience(enemy.getExperience());
+            player.levelUp(player.getExperience());
         }
     }
 
@@ -76,11 +80,6 @@ public class Combat {
             enemyAttack();
             return true;
         }
-    }
-
-    private String getUserInput() {
-        Scanner scanner = new Scanner(System.in);
-        return scanner.nextLine();
     }
     private void getEnemyHealth(){
         System.out.println(enemy.getName() + " has " + enemy.getHealth() + "/" + enemy.getMaxHealth() + " health remaining.");

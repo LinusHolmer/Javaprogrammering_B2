@@ -2,7 +2,7 @@ package Lektion4.ovning1SPEL;
 
 public class ForestTroll extends Enemy {
     public ForestTroll() {
-        super("Forest Troll",100,20,0.2,0.2,5,100);
+        super("Forest Troll",100,20,0.2,0.2,5,100,100);
     }
 
     @Override

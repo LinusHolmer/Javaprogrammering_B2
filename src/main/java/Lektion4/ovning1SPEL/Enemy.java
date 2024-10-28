@@ -8,9 +8,10 @@ public abstract class Enemy {
     private double magicalDefense;
     private int level;
     private double maxHealth;
+    private double experience;
 
 
-    public Enemy(String name, double health, double attackPower, double physicalDefense, double magicalDefense, int level, double maxHealth) {
+    public Enemy(String name, double health, double attackPower, double physicalDefense, double magicalDefense, int level, double maxHealth, double experience) {
         this.name = name;
         this.health = health;
         this.attackPower = attackPower;
@@ -18,6 +19,7 @@ public abstract class Enemy {
         this.magicalDefense = magicalDefense;
         this.level = level;
         this.maxHealth = maxHealth;
+        this.experience = experience;
     }
 
     public void physicalAttack(Player player) {
@@ -32,11 +34,7 @@ public abstract class Enemy {
     }
 
     public boolean isAlive(){
-        if(health <= 0){
-            return false;
-        } else {
-            return true;
-        }
+        return !(health <= 0);
     }
 
     public String getName() {
@@ -65,6 +63,23 @@ public abstract class Enemy {
 
     public double getMaxHealth(){ return maxHealth; }
 
+    public double getExperience() { return experience; }
+
+    public void setName(String name) { this.name = name; }
+
+    public void setHealth(double health) { this.health = health; }
+
+    public void setAttackPower(double attackPower) { this.attackPower = attackPower; }
+
+    public void setPhysicalDefense(double physicalDefense) { this.physicalDefense = physicalDefense; }
+
+    public void setMagicalDefense(double magicalDefense) { this.magicalDefense = magicalDefense; }
+
+    public void setLevel(int level) { this.level = level; }
+
+    public void setMaxHealth(double maxHealth) { this.maxHealth = maxHealth; }
+
+    public void setExperience(double experience) { this.experience = experience; }
 
     public abstract void specialAbility();
 }
