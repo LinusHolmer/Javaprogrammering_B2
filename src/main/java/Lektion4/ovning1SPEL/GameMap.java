@@ -27,6 +27,7 @@ public class GameMap {
     public String getPosition(){
         return "Player is at (" + x + " , " + y +")";
     }
+
     public void moveTown(){
         if (x == 0 && y == 0) {
             System.out.println("You are already there");

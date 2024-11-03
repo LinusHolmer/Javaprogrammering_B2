@@ -26,7 +26,7 @@ public class Player {
         this.maxHealth = maxHealth;
         this.experience = experience;
         this.maxExperience = maxExperience;
-        this.maxMana = maxExperience;
+        this.maxMana = maxMana;
 
     }
 

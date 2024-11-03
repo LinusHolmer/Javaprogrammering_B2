@@ -6,12 +6,12 @@ public class Combat {
     private Player player;
     private Enemy enemy;
     private Random random = new Random();
-    private Game game;
+    private Scanner scan;
 
     public Combat(Player player, Enemy enemy) {
         this.player = player;
         this.enemy = enemy;
-        game = new Game();
+        scan = new Scanner(System.in);
     }
 
     public void startCombat() {
@@ -20,9 +20,9 @@ public class Combat {
 
         while (battle) {
             System.out.println("attack, fireball, heal or flee!");
-            String battleInput = game.getUserInput();
+            String battleInput = scan.nextLine();
 
-            switch (battleInput) {
+            switch (battleInput.toLowerCase()) {
                 case "attack" -> playerAttack();
                 case "fireball" -> castFireball();
                 case "heal" -> castHeal();
