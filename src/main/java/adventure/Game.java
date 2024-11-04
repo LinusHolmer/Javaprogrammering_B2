@@ -22,21 +22,28 @@ public class Game {
         newBurglar = new Burglar();
         x = 0;
         y = 0;
+        running = true;
     }
 
     public void start(){
-        running = true;
         while(running){
             System.out.println("kommandon: [köket, sovrummet, hallen, kontoret, vardagsrummet]");
 
-            if(!newResident.isConscious()){
+            if(!newResident.isConscious()) {
                 System.out.println("Du förlora...");
                 running = false;
+                System.out.println("Exiting...");
             }
+            
+            if(!running){
+                break;
+            }
+
             String userInput = getUserInput();
             running = processInput(userInput);
-
         }
+        scan.close();
+        System.out.println("Game has ended.");
     }
 
 
@@ -63,9 +70,14 @@ public class Game {
     public void goKitchen() {
         if (x == 0 && y == 0) {
             x = 1;
-            System.out.println("Du går till köket och kollar på kylen.");
+            if(newResident.getDamage() == 3){
+                newResident.addDamage(3);
+                System.out.println("Du plockar upp en stekpanna i köket");
+            } else {
+                System.out.println("Du går in i köket och kollar i kylen.");
+            }
         } else {
-            System.out.println("Du kan bara gå till köket från mitten (0,0)!");
+            System.out.println("Du kan bara gå till köket från mitten!");
         }
     }
 
@@ -81,10 +93,11 @@ public class Game {
 
     public void goHall(){
         if(x == 0 && y == 0){
+            y = 1;
             System.out.println("Du går till hallen och hittar inbrottstjuven!");
             boolean battle = true;
 
-            while(battle && newResident.isConscious() && newBurglar.isConscious()) {
+            while(battle && newResident.isConscious() && newBurglar.isConscious() && running) {
                 System.out.println("Kommandon: [attack]");
 
                 String userInput = getUserInput();
@@ -98,6 +111,7 @@ public class Game {
 
     public void goOffice(){
         if(x == 0 && y == 0){
+            y = -1;
             if(newBurglar.isConscious()){
                 System.out.println("Du vågar inte gå till kontoret när inbrottstjuven fortfarande är här!");
             } else {
