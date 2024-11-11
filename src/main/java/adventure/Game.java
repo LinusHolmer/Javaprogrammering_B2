@@ -10,16 +10,14 @@ public class Game {
     private final Scanner scan;
     private final Resident newResident;
     private final Burglar newBurglar;
-    private int x;
-    private int y;
+    private String currentRoom;
     private boolean hasPickedUpPan;
 
     public Game() {
         scan = new Scanner(System.in);
         newResident = new Resident();
         newBurglar = new Burglar();
-        x = 0;
-        y = 0;
+        currentRoom = "vardagsrummet";
         running = true;
         hasPickedUpPan = false;
     }
@@ -64,8 +62,8 @@ public class Game {
     }
 
     public void goKitchen() {
-        if (x == 0 && y == 0) {
-            x = 1;
+        if ("vardagsrummet".equals(currentRoom)) {
+            currentRoom = "köket";
             if (!hasPickedUpPan) {
                 System.out.println("Du går in i köket. Du ser en stekpanna som kan vara användbar.");
                 System.out.println("Vill du plocka upp stekpannan? [ja/nej]");
@@ -81,13 +79,13 @@ public class Game {
                 System.out.println("Du går in i köket och kollar i kylen.");
             }
         } else {
-            System.out.println("Du kan bara gå till köket från mitten!");
+            System.out.println("Du kan bara gå till köket från vardagsrummet!");
         }
     }
 
     public void goBed() {
-        if (x == 0 && y == 0) {
-            x = -1;
+        if ("vardagsrummet".equals(currentRoom)) {
+            currentRoom = "sovrummet";
             System.out.println("Du utforskar sovrummet och hittar en säng.");
         } else {
             System.out.println("Du kan bara gå till sovrummet från vardagsrummet!");
@@ -95,8 +93,8 @@ public class Game {
     }
 
     public void goHall() {
-        if (x == 0 && y == 0) {
-            y = 1;
+        if ("vardagsrummet".equals(currentRoom)) {
+            currentRoom = "hallen";
             System.out.println("Du går till hallen och hittar inbrottstjuven!");
             boolean battle = true;
 
@@ -111,8 +109,8 @@ public class Game {
     }
 
     public void goOffice() {
-        if (x == 0 && y == 0) {
-            y = -1;
+        if ("vardagsrummet".equals(currentRoom)) {
+            currentRoom = "kontoret";
             if (newBurglar.isConscious()) {
                 System.out.println("Du vågar inte gå till kontoret när inbrottstjuven fortfarande är här!");
             } else {
@@ -131,10 +129,9 @@ public class Game {
     }
 
     public void goLivingRoom() {
-        if (x != 0 || y != 0) {
+        if (!"vardagsrummet".equals(currentRoom)) {
             System.out.println("Du går tillbaka till vardagsrummet.");
-            x = 0;
-            y = 0;
+            currentRoom = "vardagsrummet";
         } else {
             System.out.println("Du är redan i vardagsrummet!");
         }
