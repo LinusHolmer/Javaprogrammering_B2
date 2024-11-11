@@ -16,15 +16,11 @@ public abstract class Entity {
     }
 
     public void takeDamage(int damage){
-        health -= damage;
+        health = Math.max(0, health - damage);
     }
 
     public boolean isConscious(){
-        if(health > 0){
-            return true;
-        } else {
-            return false;
-        }
+        return health > 0;
     }
 
     public void addDamage(int damage){
