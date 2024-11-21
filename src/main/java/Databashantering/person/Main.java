@@ -3,11 +3,7 @@ package Databashantering.person;
 import Databashantering.JDBCUtil;
 
 
-
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 
 //execute() general
@@ -39,6 +35,10 @@ public class Main {
                 ALTER TABLE person ALTER COLUMN person_id RESTART WITH 1
                 """;
 
+        String preStatementSQL = """
+                INSERT INTO person (first_name, last_name, gender, dob, income)
+                VALUES (?,?,?,?,?)
+                """;
 
 
         try{
@@ -46,6 +46,17 @@ public class Main {
             stmt = conn.createStatement();
 
             //int rowsAffected = stmt.executeUpdate(deleteSQL);
+
+
+            PreparedStatement pstmt = conn.prepareStatement(preStatementSQL);
+
+            pstmt.setString(1, "Johan");
+            pstmt.setString(2, "Hammerin");
+            pstmt.setString(3, "M");
+            pstmt.setString(4, "2004-01-03");
+            pstmt.setString(5, "10");
+
+            pstmt.executeUpdate();
 
             JDBCUtil.commit(conn);
 

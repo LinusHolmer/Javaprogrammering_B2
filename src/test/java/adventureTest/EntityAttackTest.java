@@ -21,7 +21,7 @@ public class EntityAttackTest {
     @Test
     public void testAttack() {
         resident.attack(burglar);
-        
+
         assertEquals(9, burglar.getHealth(), "Burglar's health should be reduced by Resident's damage");
     }
 }
