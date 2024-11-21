@@ -20,10 +20,8 @@ public class EntityAttackTest {
 
     @Test
     public void testAttack() {
-        // Resident punches Burglar
         resident.attack(burglar);
 
-        // Check that Burglar's health has decreased by Resident's damage
         assertEquals(9, burglar.getHealth(), "Burglar's health should be reduced by Resident's damage");
     }
 }
