@@ -10,6 +10,10 @@ public class WorkRole {
     private int salary;
     private java.sql.Date creation_date;
 
+    WorkRole(){
+
+    }
+
     WorkRole(Integer role_id, String title, String description, int salary, java.sql.Date creation_date){
         this.role_id = role_id;
         this.title = title;
@@ -37,11 +41,11 @@ public class WorkRole {
         return Objects.hash(role_id, title, description, salary, creation_date);
     }
 
-    public Integer getRole_id() {
+    public Integer getRoleId() {
         return role_id;
     }
 
-    public void setRole_id(Integer role_id) {
+    public void setRoleId(Integer role_id) {
         this.role_id = role_id;
     }
 
@@ -69,11 +73,11 @@ public class WorkRole {
         this.salary = salary;
     }
 
-    public Date getCreation_date() {
+    public Date getCreationDate() {
         return creation_date;
     }
 
-    public void setCreation_date(Date creation_date) {
+    public void setCreationDate(Date creation_date) {
         this.creation_date = creation_date;
     }
 }

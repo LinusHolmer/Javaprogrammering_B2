@@ -1,14 +1,14 @@
 package Databashantering.projektUppgiftDB;
 
 import Databashantering.JDBCUtil;
-
 import java.sql.*;
-
 
 public class DAOImpl implements DAO{
 
     @Override
     public void insertWorkRole(WorkRole workRole) throws SQLException {
+        if(workRole == null) throw new IllegalArgumentException("Work role cannot be null");
+
         Connection conn = null;
         PreparedStatement pStmt = null;
 
@@ -18,19 +18,22 @@ public class DAOImpl implements DAO{
                 """;
         try {
             conn = JDBCUtil.getConnection();
-            pStmt = conn.prepareStatement(preStatementSQL);
+            conn.setAutoCommit(false);
 
-            pStmt.setString(1, workRole.getTitle()) ;
+            pStmt = conn.prepareStatement(preStatementSQL);
+            pStmt.setString(1, workRole.getTitle());
             pStmt.setString(2, workRole.getDescription());
             pStmt.setInt(3, workRole.getSalary());
-            pStmt.setDate(4, workRole.getCreation_date());
+            pStmt.setDate(4, workRole.getCreationDate());
 
             pStmt.executeUpdate();
-            JDBCUtil.commit(conn);
+            conn.commit();
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JDBCUtil.rollback(conn);
+            System.out.println("Work role inserted successfully");
+        } catch(SQLException e) {
+            if (conn != null) conn.rollback();
+            throw e;
+
         } finally {
             JDBCUtil.closeStatement(pStmt);
             JDBCUtil.closeConnection(conn);
@@ -42,13 +45,72 @@ public class DAOImpl implements DAO{
         Connection conn = null;
         PreparedStatement pStmt = null;
 
+        // SQL to update a record in the work_role table
         String updateSQL = """
-                
-                """;
+            UPDATE work_role
+            SET title = ?,
+                description = ?,
+                salary = ?,
+                creation_date = ?
+            WHERE role_id = ?
+            """;
+
+        try {
+            conn = JDBCUtil.getConnection();
+            pStmt = conn.prepareStatement(updateSQL);
+
+
+            pStmt.setString(1, workRole.getTitle());
+            pStmt.setString(2, workRole.getDescription());
+            pStmt.setDouble(3, workRole.getSalary());
+            pStmt.setDate(4, workRole.getCreationDate()); // Assuming getCreationDate returns java.sql.Date
+            pStmt.setInt(5, workRole.getRoleId());
+
+            int rowsAffected = pStmt.executeUpdate();
+
+            if (rowsAffected > 0) {
+                System.out.println("Successfully updated work role with ID: " + workRole.getRoleId());
+            } else {
+                System.out.println("No work role found with ID: " + workRole.getRoleId());
+            }
+
+        } finally {
+            // Close resources
+            JDBCUtil.closeStatement(pStmt);
+            JDBCUtil.closeConnection(conn);
+        }
     }
 
     @Override
-    public void deleteWorkRole(WorkRole workRole) throws SQLException {
+    public void deleteWorkRole(int input) throws SQLException {
+        if (input <= 0) throw new IllegalArgumentException("Role ID must be a positive integer");
+
+        Connection conn = null;
+        PreparedStatement pStmt = null;
+
+        String preStatementSQL = """
+                DELETE FROM work_role
+                WHERE role_id = ?
+                """;
+
+        try {
+            conn = JDBCUtil.getConnection();
+            pStmt = conn.prepareStatement(preStatementSQL);
+            pStmt.setInt(1, input);
+
+            int rowsAffected = pStmt.executeUpdate();
+
+            if (rowsAffected > 0) {
+                System.out.println("Successfully deleted work role with ID: " + input);
+            } else {
+                System.out.println("No work role found with ID: " + input);
+            }
+
+
+        } finally {
+            JDBCUtil.closeStatement(pStmt);
+            JDBCUtil.closeConnection(conn);
+        }
 
     }
 
@@ -99,7 +161,7 @@ public class DAOImpl implements DAO{
         Connection conn = null;
         ResultSet rs = null;
         Statement stmt = null;
-        String selectSQL = "select * from work_role";
+        String selectSQL = "SELECT * FROM work_role";
 
         try {
             conn = JDBCUtil.getConnection();

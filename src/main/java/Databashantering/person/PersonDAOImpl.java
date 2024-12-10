@@ -22,7 +22,7 @@ public class PersonDAOImpl implements PersonDAO{
             pStmt.setString(2, person.getLastName());
             pStmt.setString(3, person.getGender());
             pStmt.setDouble(4, person.getIncome());
-            pStmt.setDate(5, java.sql.Date.valueOf());
+         //   pStmt.setDate(5, java.sql.Date.valueOf());
 
             pStmt.executeUpdate();
             JDBCUtil.commit(conn);
