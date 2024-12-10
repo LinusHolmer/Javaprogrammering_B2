@@ -7,7 +7,6 @@ import java.sql.*;
 
 public class DAOImpl implements DAO{
 
-
     @Override
     public void insertWorkRole(WorkRole workRole) throws SQLException {
         Connection conn = null;
@@ -36,7 +35,6 @@ public class DAOImpl implements DAO{
             JDBCUtil.closeStatement(pStmt);
             JDBCUtil.closeConnection(conn);
         }
-
     }
 
     @Override
@@ -70,16 +68,13 @@ public class DAOImpl implements DAO{
 
             pStmt.setInt(1, input);
 
-            rs = pStmt.executeQuery(preStatementSQL);
+            rs = pStmt.executeQuery();
 
             if(rs.next()){
-                //getInt() hämtar ett integer-värde
                 int role_id = rs.getInt("role_id");
-                //getString() hämtar ett String-värde
                 String title = rs.getString("title");
                 String description = rs.getString("description");
                 int salary = rs.getInt("salary");
-                //getDate() hämtar ett datum-värde
                 java.sql.Date creation_date = rs.getDate("creation_date"); // JDBC:s java.sql.Date
 
                 System.out.println("Role ID: " + role_id + ", " +
@@ -87,11 +82,9 @@ public class DAOImpl implements DAO{
                         "Description: " + description + ", " +
                         "Salary: " + salary + ", " +
                         "Creation date: " + creation_date);
+            } else {
+                System.out.println("No role found with this id " +input);
             }
-
-
-
-
 
         } finally {
             JDBCUtil.closeStatement(pStmt);
@@ -103,7 +96,35 @@ public class DAOImpl implements DAO{
 
     @Override
     public void selectAllWorkRole(WorkRole workRole) throws SQLException{
+        Connection conn = null;
+        ResultSet rs = null;
+        Statement stmt = null;
+        String selectSQL = "select * from work_role";
 
+        try {
+            conn = JDBCUtil.getConnection();
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery(selectSQL);
+
+            while(rs.next()){
+                int role_id = rs.getInt("role_id");
+                String title = rs.getString("title");
+                String description = rs.getString("description");
+                int salary = rs.getInt("salary");
+                java.sql.Date creation_date = rs.getDate("creation_date"); // JDBC:s java.sql.Date
+
+                System.out.println("Role ID: " + role_id + ", " +
+                        "Title: " + title + ", " +
+                        "Description: " + description + ", " +
+                        "Salary: " + salary + ", " +
+                        "Creation date: " + creation_date);
+            }
+
+        } finally {
+            JDBCUtil.closeStatement(stmt);
+            JDBCUtil.closeConnection(conn);
+            JDBCUtil.closeResultSet(rs);
+        }
 
     }
 }
