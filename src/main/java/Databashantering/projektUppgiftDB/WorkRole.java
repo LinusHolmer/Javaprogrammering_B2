@@ -10,10 +10,6 @@ public class WorkRole {
     private int salary;
     private java.sql.Date creation_date;
 
-    WorkRole(){
-
-    }
-
     WorkRole(Integer role_id, String title, String description, int salary, java.sql.Date creation_date){
         this.role_id = role_id;
         this.title = title;

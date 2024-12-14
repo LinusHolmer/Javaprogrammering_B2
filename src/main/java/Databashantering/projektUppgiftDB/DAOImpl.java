@@ -11,6 +11,7 @@ public class DAOImpl implements DAO{
 
         Connection conn = null;
         PreparedStatement pStmt = null;
+        ResultSet generatedKeys = null;
 
         String preStatementSQL = """
                 INSERT INTO work_role (title, description, salary, creation_date)
@@ -19,17 +20,25 @@ public class DAOImpl implements DAO{
         try {
             conn = JDBCUtil.getConnection();
             conn.setAutoCommit(false);
+            pStmt = conn.prepareStatement(preStatementSQL, Statement.RETURN_GENERATED_KEYS);
 
-            pStmt = conn.prepareStatement(preStatementSQL);
             pStmt.setString(1, workRole.getTitle());
             pStmt.setString(2, workRole.getDescription());
             pStmt.setInt(3, workRole.getSalary());
             pStmt.setDate(4, workRole.getCreationDate());
 
-            pStmt.executeUpdate();
+            int rowsAffected = pStmt.executeUpdate();
+            if (rowsAffected > 0) {
+                generatedKeys = pStmt.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    int generatedId = generatedKeys.getInt(1);
+                    workRole.setRoleId(generatedId);
+                    System.out.println("Work role inserted successfully with ID: " + generatedId);
+                }
+            }
+
             conn.commit();
 
-            System.out.println("Work role inserted successfully");
         } catch(SQLException e) {
             if (conn != null) conn.rollback();
             throw e;
@@ -37,6 +46,7 @@ public class DAOImpl implements DAO{
         } finally {
             JDBCUtil.closeStatement(pStmt);
             JDBCUtil.closeConnection(conn);
+            JDBCUtil.closeResultSet(generatedKeys);
         }
     }
 
@@ -45,7 +55,6 @@ public class DAOImpl implements DAO{
         Connection conn = null;
         PreparedStatement pStmt = null;
 
-        // SQL to update a record in the work_role table
         String updateSQL = """
             UPDATE work_role
             SET title = ?,
@@ -63,7 +72,7 @@ public class DAOImpl implements DAO{
             pStmt.setString(1, workRole.getTitle());
             pStmt.setString(2, workRole.getDescription());
             pStmt.setDouble(3, workRole.getSalary());
-            pStmt.setDate(4, workRole.getCreationDate()); // Assuming getCreationDate returns java.sql.Date
+            pStmt.setDate(4, workRole.getCreationDate());
             pStmt.setInt(5, workRole.getRoleId());
 
             int rowsAffected = pStmt.executeUpdate();
@@ -74,16 +83,17 @@ public class DAOImpl implements DAO{
                 System.out.println("No work role found with ID: " + workRole.getRoleId());
             }
 
+            conn.commit();
+
         } finally {
-            // Close resources
             JDBCUtil.closeStatement(pStmt);
             JDBCUtil.closeConnection(conn);
         }
     }
 
     @Override
-    public void deleteWorkRole(int input) throws SQLException {
-        if (input <= 0) throw new IllegalArgumentException("Role ID must be a positive integer");
+    public void deleteWorkRole(WorkRole workRole) throws SQLException {
+        if (workRole.getRoleId() <= 0) throw new IllegalArgumentException("Role ID must be a positive integer");
 
         Connection conn = null;
         PreparedStatement pStmt = null;
@@ -95,18 +105,18 @@ public class DAOImpl implements DAO{
 
         try {
             conn = JDBCUtil.getConnection();
+            conn.setAutoCommit(false);
             pStmt = conn.prepareStatement(preStatementSQL);
-            pStmt.setInt(1, input);
+            pStmt.setInt(1, workRole.getRoleId());
 
             int rowsAffected = pStmt.executeUpdate();
 
             if (rowsAffected > 0) {
-                System.out.println("Successfully deleted work role with ID: " + input);
+                System.out.println("Successfully deleted work role with ID: " + workRole.getRoleId());
             } else {
-                System.out.println("No work role found with ID: " + input);
+                System.out.println("No work role found with ID: " + workRole.getRoleId());
             }
-
-
+            conn.commit();
         } finally {
             JDBCUtil.closeStatement(pStmt);
             JDBCUtil.closeConnection(conn);
@@ -115,7 +125,7 @@ public class DAOImpl implements DAO{
     }
 
     @Override
-    public void selectWorkRole(WorkRole workRole, int input) throws SQLException {
+    public void selectWorkRole(WorkRole workRole) throws SQLException {
         Connection conn = null;
         PreparedStatement pStmt = null;
         ResultSet rs = null;
@@ -128,7 +138,7 @@ public class DAOImpl implements DAO{
             conn = JDBCUtil.getConnection();
             pStmt = conn.prepareStatement(preStatementSQL);
 
-            pStmt.setInt(1, input);
+            pStmt.setInt(1, workRole.getRoleId());
 
             rs = pStmt.executeQuery();
 
@@ -145,7 +155,7 @@ public class DAOImpl implements DAO{
                         "Salary: " + salary + ", " +
                         "Creation date: " + creation_date);
             } else {
-                System.out.println("No role found with this id " +input);
+                System.out.println("No role found with this id " +workRole.getRoleId());
             }
 
         } finally {
@@ -157,7 +167,7 @@ public class DAOImpl implements DAO{
     }
 
     @Override
-    public void selectAllWorkRole(WorkRole workRole) throws SQLException{
+    public void selectAllWorkRole() throws SQLException{
         Connection conn = null;
         ResultSet rs = null;
         Statement stmt = null;
