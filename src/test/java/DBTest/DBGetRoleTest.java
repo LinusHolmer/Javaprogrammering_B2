@@ -54,12 +54,12 @@ public class DBGetRoleTest {
             JDBCUtil.closeStatement(stmt);
             JDBCUtil.closeConnection(conn);
         }
-        assertNotNull(fetchedRole, "Work role should be fetched from the database");
-        assertEquals(testWorkRole.getRoleId(), fetchedRole.getRoleId(), "Role IDs should match");
-        assertEquals(testWorkRole.getTitle(), fetchedRole.getTitle(), "Titles should match");
-        assertEquals(testWorkRole.getDescription(), fetchedRole.getDescription(), "Descriptions should match");
-        assertEquals(testWorkRole.getSalary(), fetchedRole.getSalary(), "Salaries should match");
-        assertEquals(testWorkRole.getCreationDate(), fetchedRole.getCreationDate(), "Creation dates should match");
+        assertNotNull(fetchedRole, "work role should be fetched from the database");
+        assertEquals(testWorkRole.getRoleId(), fetchedRole.getRoleId(), "role IDs should match");
+        assertEquals(testWorkRole.getTitle(), fetchedRole.getTitle(), "titles should match");
+        assertEquals(testWorkRole.getDescription(), fetchedRole.getDescription(), "descriptions should match");
+        assertEquals(testWorkRole.getSalary(), fetchedRole.getSalary(), "salaries should match");
+        assertEquals(testWorkRole.getCreationDate(), fetchedRole.getCreationDate(), "creation dates should match");
     }
 
     @AfterEach

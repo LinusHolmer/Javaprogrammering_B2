@@ -27,13 +27,13 @@ public class DAOImpl implements DAO{
             pStmt.setDate(4, workRole.getCreationDate());
 
             int rowsAffected = pStmt.executeUpdate();
-            if (rowsAffected > 0) {
-                generatedKeys = pStmt.getGeneratedKeys();
-                if (generatedKeys.next()) {
-                    int generatedId = generatedKeys.getInt(1);
-                    workRole.setRoleId(generatedId);
-                    System.out.println("Work role inserted successfully with ID: " + generatedId);
-                }
+                if (rowsAffected > 0) {
+                    generatedKeys = pStmt.getGeneratedKeys();
+                    if (generatedKeys.next()) {
+                        int generatedId = generatedKeys.getInt(1);
+                        workRole.setRoleId(generatedId);
+                        System.out.println("Work role inserted successfully with ID: " + generatedId);
+                    }
             }
 
             conn.commit();
@@ -177,6 +177,7 @@ public class DAOImpl implements DAO{
         Connection conn = null;
         ResultSet rs = null;
         Statement stmt = null;
+
         String selectSQL = "SELECT * FROM work_role";
 
         try {
