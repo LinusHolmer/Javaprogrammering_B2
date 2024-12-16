@@ -10,19 +10,20 @@ public class WorkRole {
     private int salary;
     private java.sql.Date creation_date;
 
-    WorkRole(Integer role_id, String title, String description, int salary, java.sql.Date creation_date){
+    public WorkRole(Integer role_id, String title, String description, int salary, java.sql.Date creation_date){
         this.role_id = role_id;
         this.title = title;
         this.description = description;
         this.salary = salary;
         this.creation_date = creation_date;
     }
-    WorkRole(String title, String description, int salary, java.sql.Date creation_date){
+    public WorkRole(String title, String description, int salary, java.sql.Date creation_date){
         this.title = title;
         this.description = description;
         this.salary = salary;
         this.creation_date = creation_date;
     }
+    public WorkRole(){}
 
     @Override
     public boolean equals(Object o) {

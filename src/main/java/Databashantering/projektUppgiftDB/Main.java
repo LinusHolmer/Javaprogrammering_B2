@@ -16,14 +16,14 @@ public class Main {
             dao.selectAllWorkRole();
 
             dao.selectWorkRole(newRole);
-
+            /*
             newRole.setTitle("Senior Developer");
             dao.updateWorkRole(newRole);
 
             dao.selectWorkRole(newRole);
 
             dao.deleteWorkRole(newRole);
-
+            */
         } catch (SQLException e) {
             e.printStackTrace();
         }

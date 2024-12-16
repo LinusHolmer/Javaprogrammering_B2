@@ -19,7 +19,6 @@ public class DAOImpl implements DAO{
                 """;
         try {
             conn = JDBCUtil.getConnection();
-            conn.setAutoCommit(false);
             pStmt = conn.prepareStatement(preStatementSQL, Statement.RETURN_GENERATED_KEYS);
 
             pStmt.setString(1, workRole.getTitle());
@@ -85,7 +84,11 @@ public class DAOImpl implements DAO{
 
             conn.commit();
 
-        } finally {
+        } catch(SQLException e) {
+            if (conn != null) conn.rollback();
+            throw e;
+        }
+        finally {
             JDBCUtil.closeStatement(pStmt);
             JDBCUtil.closeConnection(conn);
         }
@@ -105,7 +108,6 @@ public class DAOImpl implements DAO{
 
         try {
             conn = JDBCUtil.getConnection();
-            conn.setAutoCommit(false);
             pStmt = conn.prepareStatement(preStatementSQL);
             pStmt.setInt(1, workRole.getRoleId());
 
@@ -143,17 +145,7 @@ public class DAOImpl implements DAO{
             rs = pStmt.executeQuery();
 
             if(rs.next()){
-                int role_id = rs.getInt("role_id");
-                String title = rs.getString("title");
-                String description = rs.getString("description");
-                int salary = rs.getInt("salary");
-                java.sql.Date creation_date = rs.getDate("creation_date"); // JDBC:s java.sql.Date
-
-                System.out.println("Role ID: " + role_id + ", " +
-                        "Title: " + title + ", " +
-                        "Description: " + description + ", " +
-                        "Salary: " + salary + ", " +
-                        "Creation date: " + creation_date);
+                workRolePrint(rs);
             } else {
                 System.out.println("No role found with this id " +workRole.getRoleId());
             }
@@ -164,6 +156,20 @@ public class DAOImpl implements DAO{
             JDBCUtil.closeResultSet(rs);
         }
 
+    }
+
+    private void workRolePrint(ResultSet rs) throws SQLException {
+        int role_id = rs.getInt("role_id");
+        String title = rs.getString("title");
+        String description = rs.getString("description");
+        int salary = rs.getInt("salary");
+        Date creation_date = rs.getDate("creation_date"); // JDBC:s java.sql.Date
+
+        System.out.println("Role ID: " + role_id + ", " +
+                "Title: " + title + ", " +
+                "Description: " + description + ", " +
+                "Salary: " + salary + ", " +
+                "Creation date: " + creation_date);
     }
 
     @Override
@@ -179,17 +185,7 @@ public class DAOImpl implements DAO{
             rs = stmt.executeQuery(selectSQL);
 
             while(rs.next()){
-                int role_id = rs.getInt("role_id");
-                String title = rs.getString("title");
-                String description = rs.getString("description");
-                int salary = rs.getInt("salary");
-                java.sql.Date creation_date = rs.getDate("creation_date"); // JDBC:s java.sql.Date
-
-                System.out.println("Role ID: " + role_id + ", " +
-                        "Title: " + title + ", " +
-                        "Description: " + description + ", " +
-                        "Salary: " + salary + ", " +
-                        "Creation date: " + creation_date);
+                workRolePrint(rs);
             }
 
         } finally {
