@@ -9,7 +9,7 @@ public class Application {
     private static Scanner scan = new Scanner(System.in);
     private static DAOImpl dao = new DAOImpl();
 
-    public static void main(String[] args) {
+    public void appStart() {
         while (true) {
             System.out.println("\nVälj ett alternativ:");
             System.out.println("1. Skapa ny arbetsroll");
@@ -133,7 +133,11 @@ public class Application {
         String email = scan.nextLine();
         System.out.println("Ange lösenord:");
         String password = scan.nextLine();
+
         Connection conn = null;
+        PreparedStatement pStmt = null;
+        ResultSet rs = null;
+
 
         try {
             conn = JDBCUtil.getConnection();
@@ -144,10 +148,11 @@ public class Application {
                 JOIN work_role r ON e.role_id = r.role_id
                 WHERE e.email = ? AND e.password = ?
             """;
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, email);
-            stmt.setString(2, password);
-            ResultSet rs = stmt.executeQuery();
+            pStmt = conn.prepareStatement(sql);
+
+            pStmt.setString(1, email);
+            pStmt.setString(2, password);
+            rs = pStmt.executeQuery();
 
             if (rs.next()) {
                 String name = rs.getString("name");
@@ -164,6 +169,11 @@ public class Application {
 
         } catch (SQLException e) {
             e.printStackTrace();
+
+        } finally {
+            JDBCUtil.closeStatement(pStmt);
+            JDBCUtil.closeConnection(conn);
+            JDBCUtil.closeResultSet(rs);
         }
     }
 }
