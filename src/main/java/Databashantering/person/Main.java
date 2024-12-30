@@ -49,13 +49,11 @@ public class Main {
 
 
             PreparedStatement pstmt = conn.prepareStatement(preStatementSQL);
-
             pstmt.setString(1, "Johan");
             pstmt.setString(2, "Hammerin");
             pstmt.setString(3, "M");
             pstmt.setString(4, "2004-01-03");
             pstmt.setString(5, "10");
-
             pstmt.executeUpdate();
 
             JDBCUtil.commit(conn);
