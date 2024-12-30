@@ -1,24 +1,35 @@
 package Databashantering;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.*;
+import java.util.Properties;
 
 public class JDBCUtil {
-    public static Connection getConnection() throws SQLException {
-        //skapa upp en instans av hsql:s jdbcDriver-klass
+    private static Properties properties = new Properties();
+
+    static {
+        try (InputStream input = JDBCUtil.class.getClassLoader().getResourceAsStream("application.properties")) {
+            if (input == null) {
+                throw new IOException("Unable to find application.properties");
+            }
+            properties.load(input);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new ExceptionInInitializerError("Failed to load database properties");
+        }
+    }
+
+        public static Connection getConnection() throws SQLException {
         Driver hsqlDriver = new org.hsqldb.jdbcDriver();
-        //registrera drivern hos klassen DriverManager
         DriverManager.registerDriver(hsqlDriver);
-        //Skapa en URL till databasen
-        String dbURL = "jdbc:hsqldb:hsql://localhost/jdbclab";
-        //Default användarnamn
-        String userId = "sa";
-        //Default password
-        String password = "";
-        //Använd metoden getConnection i DriverManager för att få en anslutning till databasen
+
+        String dbURL = properties.getProperty("db.url");
+        String userId = properties.getProperty("db.user");
+        String password = properties.getProperty("db.password");
+
         Connection conn = DriverManager.getConnection(dbURL, userId, password);
-        //Sätt autoCommit till false
         conn.setAutoCommit(false);
-        //returnera anslutningen
         return conn;
     }
 
@@ -76,5 +87,7 @@ public class JDBCUtil {
         DatabaseMetaData metadata = conn.getMetaData();
         return metadata.getDatabaseProductName();
     }
+
+    
 
 }
